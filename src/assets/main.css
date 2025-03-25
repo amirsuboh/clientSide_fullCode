@@ -247,9 +247,9 @@ nav{
 
 .error{
   color: var(--clr-green);
-  font-size: .9rem;
+  font-size: small;
   font-weight: bold;
-  line-height: 2rem;
+  /* line-height: 2rem; */
   /* text-shadow: 0rem .1rem .4rem var(--clr-dark); */
 }
 

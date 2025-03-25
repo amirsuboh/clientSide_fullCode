@@ -2,13 +2,14 @@
   import Header from "../components/Header.vue";
   import { RouterLink, useRouter, RouterView } from 'vue-router';
   import { ref, useTemplateRef } from "vue";
+  import { useUserStore } from "@/stores/user";
 
-  const name = ref(localStorage.getItem('userName'));
   const router = useRouter();
+  const userStore = useUserStore();
 
   async function signOut(e){
 
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem('token');
       const url = "https://hap-app-api.azurewebsites.net/user/logout";
       const options = {
           method: "POST",
@@ -22,6 +23,7 @@
       if(response.ok){
           if (response.status === 200){
               localStorage.clear();
+              userStore.clear();
           }
 
           router.push({
@@ -44,10 +46,9 @@
   async function deleteAcc(e){
     let person = prompt("Type in your username to confirm deleting account");
 
-    if (person === localStorage.getItem('userName')){
+    if (person === userStore.userName){
 
       const token = localStorage.getItem('token');
-
       const url = 'https://hap-app-api.azurewebsites.net/user';
 
       const options = {
@@ -61,6 +62,7 @@
 
       if (response.status === 200){
         localStorage.clear();
+        userStore.clear();
 
         router.push({
           name: "home"

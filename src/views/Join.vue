@@ -1,16 +1,16 @@
 <script setup>
 import Header from "../components/Header.vue";
 import { useRouter } from "vue-router";
-import { ref, reactive } from "vue";
+import { ref } from "vue";
+import { useUserStore } from "@/stores/user";
+import { storeToRefs } from "pinia";
 
 const router = useRouter();
-let empty;
+const userStore = useUserStore();
+const {firstName, lastName, userName, email, token} = storeToRefs(userStore);
+const password = ref('');
 
-const email = ref();
-const userName = ref();
-const password = ref();
-const firstName = ref();
-const lastName = ref();
+let empty;
 
 async function createAccount(e){
     e.preventDefault();
@@ -53,13 +53,15 @@ async function createAccount(e){
         }   
 
         if (valid){
-            const data = {
+            const data = { 
                 email: email.value,
-                userName: userName.value, 
-                password: password.value, 
-                firstName: firstName.value, 
+                userName: userName.value,
+                password: password.value,
+                firstName: firstName.value,
                 lastName: lastName.value
             };
+
+            console.log(data);
 
             const url = "https://hap-app-api.azurewebsites.net/user";
 
@@ -76,12 +78,9 @@ async function createAccount(e){
             if (response.status === 201){
 
                 const data = await response.json();
-
+                token.value = data.token;
                 localStorage.setItem('token', data.token);
-                localStorage.setItem('firstName', firstName.value);
-                localStorage.setItem('lastName', lastName.value);
-                localStorage.setItem('email', email.value);
-                localStorage.setItem('userName', userName.value);
+                localStorage.setItem('userName', data.user.userName);
         
                 router.push({
                     name: 'main'

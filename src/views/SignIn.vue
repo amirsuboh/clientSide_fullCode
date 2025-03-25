@@ -1,13 +1,16 @@
 <script setup>
 import Header from "../components/Header.vue";
 import { useRouter } from "vue-router";
-import { ref, reactive } from "vue";
+import { ref } from "vue";
+import { useUserStore } from "@/stores/user";
+import { storeToRefs } from "pinia";
 
 const router = useRouter();
+const userStore = useUserStore();
 let empty;
 
-const email = ref();
-const password = ref();
+const { email, token, userName } = storeToRefs(userStore);
+const password = ref('');
 
 async function signIn(e){
     e.preventDefault();
@@ -72,12 +75,14 @@ async function signIn(e){
 
             if (response.status === 200){
                 const data = await response.json();
+                token.value = data.token;
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('userName', data.user.userName);
+                userName.value = data.user.userName;
 
-                localStorage.setItem("token", data.token);
-                localStorage.setItem("userName", data.user.userName);
                 router.push({
                     name: 'main'
-                })
+                });
             }
             else if(response.status === 400) {
                 err.innerHTML = "Check your credentials and try again";

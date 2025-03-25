@@ -89,7 +89,8 @@ async function sendMessage(){
         text.value='';
         const data = await response.json();
         data.style = {
-            'background-color': 'var(--clr-blue)'
+            'background-color': 'var(--clr-blue)',
+            'text-align': 'right'
         }
         messages.value.push(data);
     }

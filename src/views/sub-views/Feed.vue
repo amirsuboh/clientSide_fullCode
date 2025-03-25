@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 
-const uName = ref(localStorage.userName);
+const uName = ref(localStorage.getItem('userName'));
 
 </script>
 

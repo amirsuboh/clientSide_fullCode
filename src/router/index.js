@@ -101,6 +101,13 @@ const router = createRouter({
             component: Home,
             meta: {
                 authRequired: false
+            },
+            beforeEnter: (to, from) => {
+                if (localStorage.token){
+                    return {
+                        path: '/main'
+                    }
+                }
             }
         }
     ],
